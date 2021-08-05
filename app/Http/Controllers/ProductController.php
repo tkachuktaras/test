@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Product;
 use App\ProductOption;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
     public function show($id)
     {
-        $product = Product::where('id', $id)->with('product_option', 'user_product')->first();
+        $product = Product::where('id', $id)->with('product_option', 'user_product.user')->firstOrFail();
 
         return view('admin-panel.products.show', ['product' => $product]);
     }
@@ -26,7 +28,7 @@ class ProductController extends Controller
         return view('admin-panel.products.create');
     }
 
-    public function store(Request $req){
+    public function store(ProductRequest $req){
         $product = new Product();
         $product->name = $req->input('name');
         $product->description = $req->input('description');
@@ -37,18 +39,31 @@ class ProductController extends Controller
     }
 
     public function edit($id){
-        $product = new Product();
-        return view('admin-panel.products.edit', ['product' => $product->find($id)]);
+        $product = Product::where('id', $id)->with('product_option', 'user_product.user')->firstOrFail();
+
+        if($product->user_product->isEmpty()){
+            $disabled = false;
+            return view('admin-panel.products.edit', ['product' => $product, 'disabled' => $disabled]);
+        } else {
+            foreach($product->user_product as $user_product){
+                if($user_product->user->id == Auth::user()->id){
+                    $disabled = true;
+                } else {
+                    $disabled = false;
+                }
+            }
+            return view('admin-panel.products.edit', ['product' => $product, 'disabled' => $disabled]);
+        }
     }
 
-    public function update(Request $req, $id){
-        $product = Product::find($id);
+    public function update(ProductRequest $req, $id){
+        $product = Product::where('id', $id)->firstOrFail();
         $product->name = $req->input('name');
         $product->description = $req->input('description');
 
         $product->save();
 
-        return redirect()->route('products.index');
+        return redirect()->route('product.edit', $id);
     }
 
     public function destroy($id)

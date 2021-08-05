@@ -2,8 +2,9 @@
 
 @section('content')
     <div class="container">
-        <button type="button" class="btn btn-link" onclick="location.href='{{ route('users.index') }}'">Users</button>
-        <button type="button" class="btn btn-link" onclick="location.href='{{ route('products.index') }}'">Products</button>
+        <a href="{{ route('users.index') }}" class="mr-3">Users</a>
+        <a href="{{ route('products.index') }}">Products</a>
+        <br><br>
         <table class="table">
             <thead class="thead-light">
             <tr>

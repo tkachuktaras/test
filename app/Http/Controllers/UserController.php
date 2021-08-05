@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -9,7 +10,7 @@ class UserController extends Controller
 {
     public function show($id)
     {
-        $user = User::where('id', $id)->with('user_products')->first();
+        $user = User::where('id', $id)->with('user_products')->firstOrFail();
         return view('admin-panel.users.show', ['user' => $user]);
     }
 
@@ -20,12 +21,12 @@ class UserController extends Controller
     }
 
     public function edit($id){
-        $user = new User();
-        return view('admin-panel.users.edit', ['user' => $user->find($id)]);
+        $user = User::findOrFail($id);
+        return view('admin-panel.users.edit', ['user' => $user]);
     }
 
-    public function update(Request $req, $id){
-        $user = User::find($id);
+    public function update(UserRequest $req, $id){
+        $user = User::findOrFail($id);
         $user->name = $req->input('name');
         $user->address = $req->input('address');
 
@@ -36,7 +37,7 @@ class UserController extends Controller
 
     public function destroy($id)
     {
-        User::find($id)->delete();
+        User::findOrFail($id)->delete();
         return redirect()->route('users.index');
     }
 }

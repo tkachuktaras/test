@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserProductRequest;
 use App\UserProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UserProductController extends Controller
 {
-    public function update(Request $req){
+    public function add(UserProductRequest $req){
         $user_product = new UserProduct();
         $user_product->count = $req->input('count');
         $user_product->price = $req->input('price');
@@ -18,5 +19,11 @@ class UserProductController extends Controller
         $user_product->save();
 
         return redirect()->route('product.edit', $req->id);
+    }
+
+    public function destroy(Request $req, $id)
+    {
+        UserProduct::findOrFail($id)->delete();
+        return redirect()->route('product.edit', $req->product_id);
     }
 }

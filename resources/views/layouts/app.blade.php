@@ -19,6 +19,15 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    <style type="text/css">
+        .big-hr {
+            border: none;
+            background-color: #9c9c9c; /* Цвет линии */
+            color: #9c9c9c; /* Цвет линии для IE6-7 */
+            height: 0.1px; /* Толщина линии */
+        }
+    </style>
 </head>
 <body>
     <div id="app">

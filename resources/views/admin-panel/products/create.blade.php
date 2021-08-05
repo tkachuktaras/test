@@ -1,9 +1,22 @@
 @extends('layouts.app')
 
 @section('content')
-    <br>
     <div class="container">
-
+        <a href="{{ route('users.index') }}" class="mr-3">Users</a>
+        <a href="{{ route('products.index') }}">Products</a>
+        <br><br>
+        @if ($errors->has('name') || $errors->has('description'))
+            <div class="alert alert-danger">
+                <ul>
+                    @if($errors->has('name'))
+                        <li>{{ $errors->first('name') }}</li>
+                    @endif
+                    @if($errors->has('description'))
+                        <li>{{ $errors->first('description') }}</li>
+                    @endif
+                </ul>
+            </div>
+        @endif
         <form action="{{ route('product.store') }}" method="post">
             @csrf
             <div>

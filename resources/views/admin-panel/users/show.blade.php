@@ -2,6 +2,10 @@
 
 @section('content')
     <div class="container">
+        <a href="{{ route('users.index') }}" class="mr-3">Users</a>
+        <a href="{{ route('products.index') }}">Products</a>
+        <br><br>
+        <h3>User:</h3>
         <table class="table">
             <thead class="thead-light">
             <tr>
@@ -18,7 +22,7 @@
             </tr>
             </tbody>
         </table><br>
-        Products
+        <h3>Products:</h3>
         <table class="table">
             <thead class="thead-light">
             <tr>
@@ -30,7 +34,7 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($user->user_products as $products)
+            @foreach($user->all_products as $products)
                 <tr>
                     <th scope="row">{{ $products->id }}</th>
                     <td>{{ $products->count }}</td>

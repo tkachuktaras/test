@@ -15,11 +15,18 @@ class CreateUserProductsTable extends Migration
     {
         Schema::create('user_products', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id');
-            $table->integer('product_id');
+
+            $table->integer('user_id')->unsigned();
+            $table->integer('product_id')->unsigned();
             $table->integer('count');
             $table->float('price');
+
             $table->timestamps();
+        });
+
+        Schema::table('user_products', function($table) {
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
     }
 
